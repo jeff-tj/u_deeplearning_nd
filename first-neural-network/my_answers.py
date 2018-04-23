@@ -96,12 +96,12 @@ class NeuralNetwork(object):
         # TODO: Backpropagated error terms - Replace these values with your calculations.
         output_error_term = error * final_outputs * (1-final_outputs)
 
-        hidden_error = np.matmul(output_error_term, self.weights_hidden_to_output.T)
+        hidden_error = output_error_term * self.weights_hidden_to_output
 
-        hidden_error_term = hidden_error * hidden_outputs * (1-hidden_outputs)
+        hidden_error_term = hidden_error * np.dot(hidden_outputs, (1-hidden_outputs))
 
         # Weight step (input to hidden)
-        delta_weights_i_h += hidden_error_term.T * X[:, None]
+        delta_weights_i_h += np.matmul(X[:, None], hidden_error_term.T)
         # Weight step (hidden to output)
         delta_weights_h_o += output_error_term * hidden_outputs[:, None]
         return delta_weights_i_h, delta_weights_h_o
